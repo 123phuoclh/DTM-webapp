@@ -1,6 +1,5 @@
 package org.example.Backend.service;
 
-import jdk.nashorn.internal.runtime.options.Option;
 import org.example.Backend.dto.FriendDTO;
 import org.example.Backend.exception.ResourceNotFoundException;
 import org.example.Backend.model.Friend;
@@ -33,7 +32,7 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public void deleteById(Long id) {
-        friendRepository.deleteById(String.valueOf(id));
+        friendRepository.deleteById(id);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public Friend getById(Long id) {
-        Optional<Friend> searchName = friendRepository.findById(String.valueOf(id));
+        Optional<Friend> searchName = friendRepository.findById(id);
         if (searchName.isPresent()) {
             return searchName.get();
         } else throw new ResourceNotFoundException(id + " not found ");

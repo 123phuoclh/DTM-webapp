@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface FriendRepository extends JpaRepository<Friend, String> {
+public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     @Query(value = "SELECT * from Friend where name like %:inPutName% or nickName like %:inPutName% ", nativeQuery = true)
     Page<Friend> searchFriendByName(@Param("inPutName") String keyWord, Pageable pageable);
