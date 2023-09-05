@@ -8,4 +8,6 @@ import java.util.List;
 @Service
 public interface UserService {
     UserDTO getUserByID(Long id);
+
+    List<UserDTO> searchName(String keyword);
 }

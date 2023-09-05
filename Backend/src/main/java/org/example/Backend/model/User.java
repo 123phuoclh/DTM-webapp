@@ -19,5 +19,5 @@ public class User {
     private String nickName;
     private String login;
     private String hashed_password;
-    private String avatar
+    private String avatar;
 }
