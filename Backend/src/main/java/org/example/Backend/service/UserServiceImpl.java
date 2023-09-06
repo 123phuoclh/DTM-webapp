@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,5 +57,10 @@ public class UserServiceImpl implements UserService {
         }
         userListDTO = convertEntityToDTOList(pageResult);
         return userListDTO;
+    }
+
+    @Override
+    public User updateUserByID(List<User> list) {
+        return null;
     }
 }
