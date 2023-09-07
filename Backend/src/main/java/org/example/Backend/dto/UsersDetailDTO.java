@@ -4,21 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.Backend.model.User;
 
-import java.util.List;
-import java.util.Optional;
-
+import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+public class UsersDetailDTO {
     private Long id;
     private String name;
-    private String nickName;
     private String email;
-    private String avatar;
-    public UserDTO(Optional<User> user) {
-    }
+    private String username;
+    private String hashed_password;
+    private Date create_date;
 }

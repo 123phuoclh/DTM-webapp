@@ -17,7 +17,6 @@ public class User {
     private Long id;
     private String name;
     private String nickName;
-    private String login;
-    private String hashed_password;
+    private String email;
     private String avatar;
 }

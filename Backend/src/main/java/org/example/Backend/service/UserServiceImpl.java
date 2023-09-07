@@ -22,7 +22,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     private static final ModelMapper modelMapper = new ModelMapper();
     public double getTotalPage() {
         return userRepository.findAll().size();
