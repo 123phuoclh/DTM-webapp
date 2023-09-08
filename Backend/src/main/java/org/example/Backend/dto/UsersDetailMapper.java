@@ -9,7 +9,6 @@ public class UsersDetailMapper {
         tmp.setName(usersDetail.getName());
         tmp.setEmail(usersDetail.getEmail());
         tmp.setUsername(usersDetail.getUsername());
-        tmp.setCreate_date(usersDetail.getCreate_date());
         return tmp;
     }
 }

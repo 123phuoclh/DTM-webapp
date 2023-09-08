@@ -24,5 +24,11 @@ public class UsersDetail {
     private String email;
     private String username;
     private String hashed_password;
-    private Date create_date;
+
+    public UsersDetail(String email, String name, String username, String hashedPassword) {
+        this.email = email;
+        this.name = name;
+        this.username = username;
+        this.hashed_password = hashedPassword;
+    }
 }

@@ -16,5 +16,4 @@ public class UsersDetailDTO {
     private String email;
     private String username;
     private String hashed_password;
-    private Date create_date;
 }

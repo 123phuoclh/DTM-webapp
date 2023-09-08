@@ -28,5 +28,10 @@ public class UsersDetailServiceImpl implements UsersDetailService {
     public String existUserEmail(String email) {
         return usersDetailRepository.existUserEmail(email);
     }
+
+    @Override
+    public void addNew(String name, String email, String username, String hashed_password) {
+        usersDetailRepository.addNew(name, email, username, hashed_password);
+    }
 }
 
