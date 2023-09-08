@@ -46,14 +46,11 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> searchName(String keyword) {
         List<UserDTO> userListDTO;
         Pageable paging = PageRequest.of(0, 5);
-        List<User> pageResult = null;
-        int pages;
+        List<User> pageResult;
         if (keyword.isEmpty()) {
             pageResult = userRepository.findAll(paging).toList();
-            pages = (int) Math.ceil(getTotalPage() / 5);
         } else {
             pageResult = userRepository.searchUserByKeyword(keyword, paging).toList();
-            pages = (int) Math.ceil((double) userRepository.countUserByKeyword(keyword) / 5);
         }
         userListDTO = convertEntityToDTOList(pageResult);
         return userListDTO;

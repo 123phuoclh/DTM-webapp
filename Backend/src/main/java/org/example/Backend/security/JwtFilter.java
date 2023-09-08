@@ -1,8 +1,7 @@
 package org.example.Backend.security;
 
-import org.example.Backend.model.UsersDetail;
 import org.example.Backend.service.UsersDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,10 +19,14 @@ import java.io.IOException;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-    @Autowired
-    private JwtUtility jwtUtility;
-    @Autowired
-    private UsersDetailService usersDetailService;
+
+    private final JwtUtility jwtUtility;
+
+    private final UsersDetailService usersDetailService;
+    public JwtFilter(JwtUtility jwtUtility, UsersDetailService usersDetailService ) {
+        this.jwtUtility = jwtUtility;
+        this.usersDetailService= usersDetailService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
