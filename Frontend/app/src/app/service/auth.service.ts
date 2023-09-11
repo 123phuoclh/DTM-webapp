@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from "../model/user.model";
 
-const AUTH_API = 'http://localhost:8080/api/';
+const AUTH_API = 'http://localhost:8080/';
 
 
 @Injectable({
