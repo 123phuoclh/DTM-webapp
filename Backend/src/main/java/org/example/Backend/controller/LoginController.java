@@ -10,15 +10,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class LoginController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -30,20 +32,23 @@ public class LoginController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> Login(@RequestBody UsersDetailDTO usersDetailDTO) {
+    public ResponseEntity<?> Login(@Valid @RequestBody UsersDetailDTO usersDetailDTO) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(usersDetailDTO.getUsername(), usersDetailDTO.getHashed_password()));
+                new UsernamePasswordAuthenticationToken(usersDetailDTO.getUsername(), usersDetailDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtility.generateJwtToken(usersDetailDTO);
+        UserDetails usersDetail = usersDetailService.loadUserByUsername(usersDetailDTO.getUsername());
         return ResponseEntity.ok(jwt);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> Register(@RequestBody UsersDetailDTO usersDetailDTO) {
-        if (!usersDetailService.existUserEmail(usersDetailDTO.getEmail()).isEmpty()) {
-            return ResponseEntity.badRequest().body(usersDetailDTO);
+        if (usersDetailService.existUserEmail(usersDetailDTO.getEmail()) != null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message","Email đã tồn tại");
+            return ResponseEntity.badRequest().body(response);
         } else {
-            UsersDetail usersDetail = new UsersDetail(usersDetailDTO.getName(), usersDetailDTO.getEmail(), usersDetailDTO.getUsername(), passwordEncoder.encode(usersDetailDTO.getHashed_password()));
+            UsersDetail usersDetail = new UsersDetail(usersDetailDTO.getName(),usersDetailDTO.getEmail(), usersDetailDTO.getUsername(), passwordEncoder.encode(usersDetailDTO.getPassword()));
             usersDetailService.addNew(usersDetail.getName(), usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getHashed_password());
             Map<String, String> response = new HashMap<>();
             response.put("message","Đăng ký tài khoản thành công");

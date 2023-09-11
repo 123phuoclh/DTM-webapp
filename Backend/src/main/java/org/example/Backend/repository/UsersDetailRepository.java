@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsersDetailRepository extends JpaRepository<UsersDetail, String> {
-    UserDetails findUsersDetailByUserName(String username);
+    UserDetails findUsersDetailByUsername(String username);
 
     @Query(value = "select email from users_detail where email = ?1",nativeQuery = true)
     String existUserEmail(String email);

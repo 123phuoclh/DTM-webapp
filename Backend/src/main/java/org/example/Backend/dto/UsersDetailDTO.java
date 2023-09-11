@@ -15,5 +15,5 @@ public class UsersDetailDTO {
     private String name;
     private String email;
     private String username;
-    private String hashed_password;
+    private String password;
 }

@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
 
 
 @NoArgsConstructor
@@ -25,9 +24,9 @@ public class UsersDetail {
     private String username;
     private String hashed_password;
 
-    public UsersDetail(String email, String name, String username, String hashedPassword) {
-        this.email = email;
+    public UsersDetail(String name, String email, String username, String hashedPassword) {
         this.name = name;
+        this.email = email;
         this.username = username;
         this.hashed_password = hashedPassword;
     }
