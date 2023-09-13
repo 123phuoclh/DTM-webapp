@@ -1,16 +1,17 @@
-package org.example.Backend.service;
+package org.example.Backend.service.imp;
 
 import org.example.Backend.dto.UserDTO;
 import org.example.Backend.dto.UserMapper;
 import org.example.Backend.exception.ResourceNotFoundException;
 import org.example.Backend.model.User;
 import org.example.Backend.repository.UserRepository;
+import org.example.Backend.service.UserService;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,11 +26,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     private static final ModelMapper modelMapper = new ModelMapper();
+
     public double getTotalPage() {
         return userRepository.findAll().size();
     }
-    public List<UserDTO> convertEntityToDTOList(List<User> userList){
-        Type listType = new TypeToken<List<UserDTO>>(){}.getType();
+
+    public List<UserDTO> convertEntityToDTOList(List<User> userList) {
+        Type listType = new TypeToken<List<UserDTO>>() {
+        }.getType();
         return modelMapper.map(userList, listType);
     }
 
@@ -44,21 +48,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> searchName(String keyword) {
-        List<UserDTO> userListDTO;
-        Pageable paging = PageRequest.of(0, 5);
-        List<User> pageResult;
-        if (keyword.isEmpty()) {
-            pageResult = userRepository.findAll(paging).toList();
-        } else {
-            pageResult = userRepository.searchUserByKeyword(keyword, paging).toList();
-        }
-        userListDTO = convertEntityToDTOList(pageResult);
-        return userListDTO;
+    public Page<User> searchName(String keyword, int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo, 5);
+        Page page = userRepository.searchUserByKeyword(keyword, pageable);
+        return page;
     }
 
     @Override
-    public User updateUserByID(List<User> list) {
-        return null;
+    public void updateUserByID(UserDTO userDTO) {
+        this.userRepository.updateUserByID(userDTO.getName(), userDTO.getNickName(), userDTO.getEmail(), userDTO.getAddress(), userDTO.getPhoneNumber(), userDTO.getAvatar(), userDTO.getId());
     }
 }

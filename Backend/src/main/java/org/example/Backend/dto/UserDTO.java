@@ -19,6 +19,6 @@ public class UserDTO {
     private String nickName;
     private String email;
     private String avatar;
-    public UserDTO(Optional<User> user) {
-    }
+    private String address;
+    private String phoneNumber;
 }

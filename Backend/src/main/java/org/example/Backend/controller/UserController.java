@@ -1,12 +1,18 @@
 package org.example.Backend.controller;
 
 import org.example.Backend.dto.UserDTO;
+import org.example.Backend.model.User;
 import org.example.Backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/User")
@@ -19,14 +25,27 @@ public class UserController {
         UserDTO result = userService.getUserByID(id);
         return ResponseEntity.ok(result);
     }
+
     @GetMapping("/search")
-    public ResponseEntity<?> searchUser(@RequestParam String keyword) {
-        List<UserDTO> result = userService.searchName(keyword);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> searchUser(@RequestParam String keyword, int page) {
+        Page<User> result = userService.searchName(keyword, page);
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateUserByID(@PathVariable Long id) {
-        return null;
+    @PutMapping("/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateUserByID(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO) {
+        if (userService.getUserByID(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Map<String, String> response = new HashMap<>();
+        if (userDTO.getEmail() == null) {
+            response.put("message", "Email không được để trống");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } else {
+            userService.updateUserByID(userDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 }

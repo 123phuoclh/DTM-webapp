@@ -37,7 +37,6 @@ public class LoginController {
                 new UsernamePasswordAuthenticationToken(usersDetailDTO.getUsername(), usersDetailDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtility.generateJwtToken(usersDetailDTO);
-        UserDetails usersDetail = usersDetailService.loadUserByUsername(usersDetailDTO.getUsername());
         return ResponseEntity.ok(jwt);
     }
 
@@ -50,6 +49,7 @@ public class LoginController {
         } else {
             UsersDetail usersDetail = new UsersDetail(usersDetailDTO.getName(),usersDetailDTO.getEmail(), usersDetailDTO.getUsername(), passwordEncoder.encode(usersDetailDTO.getPassword()));
             usersDetailService.addNew(usersDetail.getName(), usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getHashed_password());
+            usersDetailService.addNewUser(usersDetail.getEmail(), usersDetail.getName());
             Map<String, String> response = new HashMap<>();
             response.put("message","Đăng ký tài khoản thành công");
             return ResponseEntity.ok(response);

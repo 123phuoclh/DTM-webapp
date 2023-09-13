@@ -2,14 +2,14 @@ package org.example.Backend.service;
 
 import org.example.Backend.dto.UserDTO;
 import org.example.Backend.model.User;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface UserService {
     UserDTO getUserByID(Long id);
 
-    List<UserDTO> searchName(String keyword);
+    Page<User> searchName(String keyword, int page);
 
-    User updateUserByID(List<User> list);
+    void updateUserByID(UserDTO userDTO);
 }

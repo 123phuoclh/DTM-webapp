@@ -1,6 +1,9 @@
-package org.example.Backend.service;
+package org.example.Backend.service.imp;
 
+import org.example.Backend.model.UsersDetail;
+import org.example.Backend.model.UsersDetailCustom;
 import org.example.Backend.repository.UsersDetailRepository;
+import org.example.Backend.service.UsersDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,13 +17,13 @@ public class UsersDetailServiceImpl implements UsersDetailService {
     private UsersDetailRepository usersDetailRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username){
-        UserDetails usersDetail = usersDetailRepository.findUsersDetailByUsername(username);
+    public UserDetails loadUserByUsername(String username) {
+        UsersDetail usersDetail = usersDetailRepository.findUsersDetailByUsername(username);
         if (usersDetail.getUsername() == null) {
             throw new UsernameNotFoundException("User not found with the username of: " + username);
-        } else {
-            return usersDetail;
         }
+
+        return UsersDetailCustom.build(usersDetail);
     }
 
     @Override
@@ -31,6 +34,11 @@ public class UsersDetailServiceImpl implements UsersDetailService {
     @Override
     public void addNew(String name, String email, String username, String hashed_password) {
         usersDetailRepository.addNew(name, email, username, hashed_password);
+    }
+
+    @Override
+    public void addNewUser(String email, String name) {
+        usersDetailRepository.addNewUser(email,name );
     }
 }
 
