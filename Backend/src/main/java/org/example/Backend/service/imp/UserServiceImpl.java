@@ -58,4 +58,9 @@ public class UserServiceImpl implements UserService {
     public void updateUserByID(UserDTO userDTO) {
         this.userRepository.updateUserByID(userDTO.getName(), userDTO.getNickName(), userDTO.getEmail(), userDTO.getAddress(), userDTO.getPhoneNumber(), userDTO.getAvatar(), userDTO.getId());
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
 }

@@ -26,4 +26,7 @@ public interface UserRepository extends JpaRepository <User, Long>{
             "set u.name = ?1, u.nick_name =?2, u.email = ?3, u.address = ?4, u.phone_number = ?5, u.avatar= ?6\n" +
             "where u.id = ?7 ", nativeQuery = true)
     void updateUserByID(String name, String nick_name, String email, String address, String phone_number, String avatar, Long id);
+
+    @Query(value = "select * from users where email = ?1",nativeQuery = true)
+    User getUserByEmail(String email);
 }

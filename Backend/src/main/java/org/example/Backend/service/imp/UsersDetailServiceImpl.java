@@ -40,5 +40,10 @@ public class UsersDetailServiceImpl implements UsersDetailService {
     public void addNewUser(String email, String name) {
         usersDetailRepository.addNewUser(email,name );
     }
+
+    @Override
+    public UsersDetail getUserDetailByUserName(String username) {
+        return usersDetailRepository.findUsersDetailByUsername(username);
+    }
 }
 

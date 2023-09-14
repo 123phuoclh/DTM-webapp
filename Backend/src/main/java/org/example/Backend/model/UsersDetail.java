@@ -27,7 +27,6 @@ public class UsersDetail {
     public UsersDetail(String name, String email, String username, String hashedPassword) {
         this.name = name;
         this.email = email;
-        this.username = username;
         this.hashed_password = hashedPassword;
     }
 }
