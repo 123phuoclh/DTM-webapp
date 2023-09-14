@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   // @ts-ignore
   formGroup: FormGroup;
   errorMessage = '';
-  isLogin = false;
+  username = '';
 
   constructor(private formBuild: FormBuilder,
               private toast: ToastrService,
@@ -30,15 +30,17 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
     if(this.tokenStorage.getToken()){
-      this.router.navigate(['/dashboard/User']);
+      const user = this.tokenStorage.getUser();
+      this.authService.isLoggedIn = true;
+      this.username = this.tokenStorage.getUser().username
     }
   }
 
   onSubmit() {
     this.authService.login(this.formGroup.value).subscribe(data => {
-        window.localStorage.setItem('token', data);
+        this.tokenStorage.saveTokenSession(data.token)
         console.log(data)
-        this.router.navigate(['/dashboard/User'])
+        this.router.navigate(['/dashboard/user'])
         this.authService.isLoggedIn = true;
         this.formGroup.reset();
       },
