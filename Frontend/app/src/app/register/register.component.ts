@@ -61,12 +61,14 @@ constructor(private formBuild: FormBuilder,
         data => {
           this.isSuccessful = true;
           this.isSignUpFailed = false;
-          this.toastr.success(data.message,"Hoàn tất: ",{
-            positionClass:'toast-bottom-right',
-            timeOut: 2500,
-            extendedTimeOut:1500
-          });
-          this.router.navigateByUrl("/verification");
+          // this.toastr.success(data.message,"Hoàn tất: ",{
+          //   positionClass:'toast-bottom-right',
+          //   timeOut: 2500,
+          //   extendedTimeOut:1500
+          // });
+          setTimeout(() => {
+            this.router.navigateByUrl("/login");
+          }, 10000);
 
         },
         err => {

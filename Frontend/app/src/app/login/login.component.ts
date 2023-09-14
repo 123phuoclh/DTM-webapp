@@ -14,10 +14,12 @@ export class LoginComponent implements OnInit {
   // @ts-ignore
   formGroup: FormGroup;
   errorMessage = '';
+
   constructor(private formBuild: FormBuilder,
               private toast: ToastrService,
               private authService: AuthService,
-              private router : Router) { }
+              private router: Router) {
+  }
 
   ngOnInit(): void {
     this.formGroup = this.formBuild.group({
@@ -27,16 +29,14 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.authService.login(this.formGroup.value).subscribe(
-      data => {
+    this.authService.login(this.formGroup.value).subscribe(data => {
         window.localStorage.setItem('token', data);
         console.log(data)
-        this.router.navigate(['/login']);
+        this.router.navigate(['/dashboard'])
         this.authService.isLoggedIn = true;
         this.formGroup.reset();
-
       },
-      err => {
+      (err) => {
         this.errorMessage = err.error.message;
         this.authService.isLoggedIn = false;
         this.toast.error("Sai tên đăng nhập hoặc mật khẩu hoặc tài khoản chưa được kích hoạt", "Đăng nhập thất bại: ", {
