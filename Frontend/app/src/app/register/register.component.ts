@@ -27,7 +27,6 @@ constructor(private formBuild: FormBuilder,
     this.formGroup = this.formBuild.group({
         password: ['',[Validators.required,Validators.minLength(8),Validators.maxLength(32)]],
         email:['',[Validators.required,Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]],
-        username:['',Validators.required],
         name:['',Validators.required]
       }
     );

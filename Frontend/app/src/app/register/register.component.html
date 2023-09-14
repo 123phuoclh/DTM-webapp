@@ -30,17 +30,6 @@
                 </div>
               </div>
             </div>
-            <div class="form-label-group">
-              <input formControlName="email" type="email" class="form-control" placeholder="Email*"
-                     required>
-              <div class="error-place">
-                <div *ngFor="let validation of validation_messages.email">
-                  <small class="text-danger"
-                         *ngIf="formGroup.get('email')?.hasError(validation.type) && formGroup.get('email')?.touched">
-                    {{validation.message}}</small>
-                </div>
-              </div>
-            </div>
             <p><a href="" routerLink="/reset-password" data-dismiss="modal">Quên mật khẩu ?</a></p>
             <small id="emailHelp" class="form-text text-muted">Những trường có dấu (*) là bắt buộc nhập</small>
 
