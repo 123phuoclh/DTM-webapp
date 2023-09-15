@@ -1,8 +1,7 @@
-export class UserDetailModel {
-  public id: undefined
-  public name= ''
-  public nickName= ''
-  public email = ''
-  public address = ''
-  public phoneNumber = ''
+export class UserDetail {
+  userId : undefined
+  name : string=''
+  username : string=''
+  password : string=''
+  email: string=''
 }

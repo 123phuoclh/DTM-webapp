@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
               private toast: ToastrService,
               private authService: AuthService,
               private router: Router,
-              private tokenStorage : TokenStorageService) {
+              private tokenStorage : TokenStorageService,) {
   }
 
   ngOnInit(): void {
@@ -38,10 +38,10 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.authService.login(this.formGroup.value).subscribe(data => {
-        this.tokenStorage.saveTokenSession(data.token)
-        console.log(data)
+        this.tokenStorage.saveTokenLocal(data.token)
+        this.tokenStorage.saveUserLocal(data.user)
+        this.authService.isLoggedIn = true
         this.router.navigate(['/dashboard/user'])
-        this.authService.isLoggedIn = true;
         this.formGroup.reset();
       },
       (err) => {
