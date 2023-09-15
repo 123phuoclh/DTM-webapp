@@ -17,7 +17,7 @@ public class JwtUtility implements Serializable {
         return Jwts.builder()
                 .setSubject(usersDetailDTO.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + (60 * 60 * 24)))
+                .setExpiration(new Date((new Date()).getTime() + (1000 * 60 * 60 * 24)))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
