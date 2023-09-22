@@ -6,17 +6,13 @@ import org.example.Backend.exception.ResourceNotFoundException;
 import org.example.Backend.model.User;
 import org.example.Backend.repository.UserRepository;
 import org.example.Backend.service.UserService;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,16 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-    private static final ModelMapper modelMapper = new ModelMapper();
 
     public double getTotalPage() {
         return userRepository.findAll().size();
-    }
-
-    public List<UserDTO> convertEntityToDTOList(List<User> userList) {
-        Type listType = new TypeToken<List<UserDTO>>() {
-        }.getType();
-        return modelMapper.map(userList, listType);
     }
 
     @Override
@@ -56,7 +45,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserByID(UserDTO userDTO) {
-        this.userRepository.updateUserByID(userDTO.getName(), userDTO.getNickName(), userDTO.getEmail(), userDTO.getAddress(), userDTO.getPhoneNumber(), userDTO.getAvatar(), userDTO.getId());
+        this.userRepository.editUser(userDTO.getName(), userDTO.getNickName(), userDTO.getEmail(), userDTO.getAddress(), userDTO.getPhoneNumber(), userDTO.getAvatar(), userDTO.getId());
+        this.userRepository.editUserDetail(userDTO.getName(), userDTO.getEmail(), userDTO.getUsername());
     }
 
     @Override

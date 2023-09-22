@@ -3,6 +3,7 @@ package org.example.Backend.controller;
 import org.example.Backend.dto.UserDTO;
 import org.example.Backend.model.User;
 import org.example.Backend.service.UserService;
+import org.example.Backend.service.UsersDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -15,11 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("dashboard/user")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     @Autowired
     UserService userService;
+
+    @Autowired
+    UsersDetailService usersDetailService;
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserByID(@PathVariable Long id) {
         UserDTO result = userService.getUserByID(id);
@@ -33,16 +38,22 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/edit")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateUserByID(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO) {
-        if (userService.getUserByID(id) == null) {
+    public ResponseEntity<?> updateUserByID(@Valid @RequestBody UserDTO userDTO) {
+        if (userService.getUserByID(userDTO.getId()) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Map<String, String> response = new HashMap<>();
-        if (userDTO.getEmail() == null) {
-            response.put("message", "Email không được để trống");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        if (usersDetailService.existUserEmail(userDTO.getEmail()) != null) {
+            if (!userService.getUserByEmail(userDTO.getEmail()).getId().equals(userDTO.getId())) {
+                response.put("message", "Email đã tồn tại");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            } else {
+
+                userService.updateUserByID(userDTO);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
         } else {
             userService.updateUserByID(userDTO);
             return new ResponseEntity<>(HttpStatus.OK);

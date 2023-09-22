@@ -37,8 +37,8 @@ public class UsersDetailServiceImpl implements UsersDetailService {
     }
 
     @Override
-    public void addNewUser(String email, String name) {
-        usersDetailRepository.addNewUser(email,name );
+    public void addNewUser(String email, String username, String name) {
+        usersDetailRepository.addNewUser(email,username,name );
     }
 
     @Override

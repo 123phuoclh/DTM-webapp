@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @NoArgsConstructor
@@ -18,15 +16,23 @@ import javax.persistence.Table;
 @Table(name = "UsersDetail")
 public class UsersDetail {
     @Id
+    @GeneratedValue
     private Long id;
+
     private String name;
+
+    @Column(unique = true)
     private String email;
+
+    @Column(unique = true)
     private String username;
+
     private String hashed_password;
 
     public UsersDetail(String name, String email, String username, String hashedPassword) {
         this.name = name;
         this.email = email;
+        this.username = username;
         this.hashed_password = hashedPassword;
     }
 }

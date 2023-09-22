@@ -2,12 +2,10 @@ package org.example.Backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.persistence.EntityManagerFactory;
 
 @Configuration
 public class WebConfig {
@@ -16,4 +14,17 @@ public class WebConfig {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**")
+//                        .allowedOrigins("http://localhost:4200") // Set your allowed origins
+//                        .allowedMethods("GET", "POST", "PUT", "DELETE") // Set allowed HTTP methods
+//                        .allowedHeaders("*") // Set allowed headers
+//                        .allowCredentials(true); // Allow credentials (cookies)
+//            }
+//        };
+//    }
 }

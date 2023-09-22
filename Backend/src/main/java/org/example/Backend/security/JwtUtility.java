@@ -17,13 +17,15 @@ public class JwtUtility implements Serializable {
         return Jwts.builder()
                 .setSubject(usersDetailDTO.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + (1000 * 60 * 60 * 24)))
+                .setExpiration(new Date((new Date()).getTime() + (100L * 24 * 60 * 60 * 1000)))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
-    public String getUserNameFromJWToken (String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJwt(token).getBody().getSubject();
+
+    public String getUserNameFromJWToken(String token) {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
+
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);

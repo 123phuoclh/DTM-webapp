@@ -15,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +42,7 @@ public class LoginController {
 
     @PostMapping("/login")
     @Transactional
-    public ResponseEntity<?> Login(@Valid @RequestBody UsersDetailDTO usersDetailDTO) throws RuntimeException {
+    public ResponseEntity<?> login(@Valid @RequestBody UsersDetailDTO usersDetailDTO) throws RuntimeException {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(usersDetailDTO.getUsername(), usersDetailDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -56,7 +55,8 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> Register(@RequestBody UsersDetailDTO usersDetailDTO) {
+    @Transactional
+    public ResponseEntity<?> register(@Valid @RequestBody UsersDetailDTO usersDetailDTO) {
         if (usersDetailService.existUserEmail(usersDetailDTO.getEmail()) != null) {
             Map<String, String> response = new HashMap<>();
             response.put("message", "Email đã tồn tại");
@@ -69,16 +69,11 @@ public class LoginController {
         } else {
             UsersDetail usersDetail = new UsersDetail(usersDetailDTO.getName(), usersDetailDTO.getEmail(), usersDetailDTO.getUsername(), passwordEncoder.encode(usersDetailDTO.getPassword()));
             usersDetailService.addNew(usersDetail.getName(), usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getHashed_password());
-            usersDetailService.addNewUser(usersDetail.getEmail(), usersDetail.getName());
+            usersDetailService.addNewUser(usersDetail.getEmail(),usersDetail.getUsername(), usersDetail.getName());
             Map<String, String> response = new HashMap<>();
             response.put("message", "Đăng ký tài khoản thành công");
             return ResponseEntity.ok(response);
         }
-    }
-
-    @PostMapping("/logout")
-    public void Logout() {
-        SecurityContextHolder.getContext().setAuthentication(null);
     }
 }
 

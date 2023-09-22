@@ -7,6 +7,7 @@ public class UserMapper {
         UserDTO tmp = new UserDTO();
         tmp.setId(user.getId());
         tmp.setName(user.getName());
+        tmp.setUsername(user.getUsername());
         tmp.setNickName(user.getNickName());
         tmp.setEmail(user.getEmail());
         tmp.setAvatar(user.getAvatar());
