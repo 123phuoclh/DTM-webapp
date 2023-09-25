@@ -6,6 +6,7 @@ import org.example.Backend.service.UserService;
 import org.example.Backend.service.UsersDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("dashboard/user")
@@ -35,8 +37,9 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> searchUser(@RequestParam String keyword, int page) {
         Page<User> result = userService.searchName(keyword, page);
-        return ResponseEntity.ok(result);
-    }
+            return ResponseEntity.ok(result);
+        }
+
 
     @PutMapping("/edit")
     @PreAuthorize("isAuthenticated()")
@@ -48,7 +51,7 @@ public class UserController {
         if (usersDetailService.existUserEmail(userDTO.getEmail()) != null) {
             if (!userService.getUserByEmail(userDTO.getEmail()).getId().equals(userDTO.getId())) {
                 response.put("message", "Email đã tồn tại");
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
 
                 userService.updateUserByID(userDTO);

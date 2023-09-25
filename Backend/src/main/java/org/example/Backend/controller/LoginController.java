@@ -60,12 +60,12 @@ public class LoginController {
         if (usersDetailService.existUserEmail(usersDetailDTO.getEmail()) != null) {
             Map<String, String> response = new HashMap<>();
             response.put("message", "Email đã tồn tại");
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.ok().body(response);
         }
         if (usersDetailService.getUserDetailByUserName(usersDetailDTO.getUsername()) != null) {
             Map<String, String> response = new HashMap<>();
             response.put("message", "Tên tài khoản đã tồn tại");
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.ok().body(response);
         } else {
             UsersDetail usersDetail = new UsersDetail(usersDetailDTO.getName(), usersDetailDTO.getEmail(), usersDetailDTO.getUsername(), passwordEncoder.encode(usersDetailDTO.getPassword()));
             usersDetailService.addNew(usersDetail.getName(), usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getHashed_password());

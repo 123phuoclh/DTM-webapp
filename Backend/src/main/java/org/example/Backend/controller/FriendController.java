@@ -17,14 +17,14 @@ public class FriendController {
     FriendService friendService;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllFriend(@RequestParam String keyword, @RequestParam Long id, int pageNo) {
-        Page<FriendLists> page = friendService.getAll(keyword, id, pageNo);
+    public ResponseEntity<?> getAllFriend(@RequestParam String name, @RequestParam Long userID, int pageNo) {
+        Page<FriendLists> page = friendService.getAll(name, userID, pageNo);
             return new ResponseEntity<>(page.get(), HttpStatus.OK);
         }
 
-    @GetMapping("/serch")
-    public ResponseEntity<?> searchFriend(@RequestParam String keyword, @RequestParam Long id, int pageNo) {
-        Page<User> result = friendService.searchToAddFriend(keyword,id, pageNo);
+    @GetMapping("/search")
+    public ResponseEntity<?> searchFriend(@RequestParam String name, @RequestParam Long id, int pageNo) {
+        Page<User> result = friendService.searchToAddFriend(name,id, pageNo);
             return new  ResponseEntity<>(result.get(), HttpStatus.OK);
         }
 
@@ -38,6 +38,12 @@ public class FriendController {
             this.friendService.addFriend(friendDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteFriend(@PathVariable(value = "id") Long id) {
+        this.friendService.deleteFriend(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

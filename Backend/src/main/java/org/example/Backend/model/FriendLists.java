@@ -1,9 +1,6 @@
 package org.example.Backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -29,4 +26,9 @@ public class FriendLists {
     private String address;
 
     private String phoneNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @EqualsAndHashCode.Exclude
+    private User user;
 }

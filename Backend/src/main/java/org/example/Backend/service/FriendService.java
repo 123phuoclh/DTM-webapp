@@ -7,9 +7,11 @@ import org.springframework.data.domain.Page;
 
 
 public interface FriendService {
-    Page<FriendLists> getAll(String name, Long id, int page);
+    Page<FriendLists> getAll(String name, Long userId, int page);
 
     Page<User> searchToAddFriend(String name, Long id, int pageNo);
 
     void addFriend(FriendDTO friendDTO);
+
+    void deleteFriend(Long id);
 }
