@@ -15,8 +15,7 @@ export class RegisterComponent implements OnInit {
   isSuccessful = false;
   isSignUpFailed = false;
   errorMessage = '';
-  isSubmited = false;
-  formValid = false;
+  isSubmitted = false;
 constructor(private formBuild: FormBuilder,
             private toastr: ToastrService,
             private authService: AuthService,
@@ -27,7 +26,8 @@ constructor(private formBuild: FormBuilder,
     this.formGroup = this.formBuild.group({
         password: ['',[Validators.required,Validators.minLength(8),Validators.maxLength(32)]],
         email:['',[Validators.required,Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]],
-        name:['',Validators.required]
+        name:['',Validators.required],
+        username:['',Validators.required]
       }
     );
     }
@@ -55,16 +55,11 @@ constructor(private formBuild: FormBuilder,
         extendedTimeOut:1500
       })
     }else{
-      this.isSubmited=true;
+      this.isSubmitted=true;
       this.authService.register(this.formGroup.value).subscribe(
         data => {
           this.isSuccessful = true;
           this.isSignUpFailed = false;
-          // this.toastr.success(data.message,"Hoàn tất: ",{
-          //   positionClass:'toast-bottom-right',
-          //   timeOut: 2500,
-          //   extendedTimeOut:1500
-          // });
           setTimeout(() => {
             this.router.navigateByUrl("/login");
           }, 10000);
@@ -78,7 +73,7 @@ constructor(private formBuild: FormBuilder,
           });
           this.errorMessage = err.error.message;
           this.isSignUpFailed = true;
-          this.isSubmited=false;
+          this.isSubmitted=false;
         }
       );
     }

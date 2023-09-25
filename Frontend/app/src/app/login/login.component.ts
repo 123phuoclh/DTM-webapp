@@ -12,8 +12,7 @@ import {TokenStorageService} from "../service/token-storage.service";
 })
 
 export class LoginComponent implements OnInit {
-  // @ts-ignore
-  formGroup: FormGroup;
+  formGroup: FormGroup | any;
   errorMessage = '';
   username = '';
 
