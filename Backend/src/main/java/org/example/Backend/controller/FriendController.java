@@ -2,7 +2,6 @@ package org.example.Backend.controller;
 
 import org.example.Backend.dto.FriendDTO;
 import org.example.Backend.model.FriendLists;
-import org.example.Backend.model.User;
 import org.example.Backend.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,20 +21,15 @@ public class FriendController {
             return new ResponseEntity<>(page.get(), HttpStatus.OK);
         }
 
-    @GetMapping("/search")
-    public ResponseEntity<?> searchFriend(@RequestParam String name, @RequestParam Long id, int pageNo) {
-        Page<User> result = friendService.searchToAddFriend(name,id, pageNo);
-            return new  ResponseEntity<>(result.get(), HttpStatus.OK);
-        }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addFriend(@RequestBody FriendDTO friendDTO) {
-        if (friendDTO.getUser_id() == null) {
+    @PutMapping("/add")
+    public ResponseEntity<?> addFriend(@RequestBody FriendDTO obj) {
+        if (obj.getUser_id() == null) {
             return new  ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (friendDTO.getEmail() == null) {
+        } else if (obj.getEmail() == null) {
             return new  ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-            this.friendService.addFriend(friendDTO);
+            this.friendService.addFriend(obj);
             return new ResponseEntity<>(HttpStatus.OK);
         }
     }

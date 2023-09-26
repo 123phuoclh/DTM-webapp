@@ -1,5 +1,6 @@
 package org.example.Backend.repository;
 
+import org.example.Backend.dto.UserDTO;
 import org.example.Backend.model.FriendLists;
 import org.example.Backend.model.User;
 import org.springframework.data.domain.Page;
@@ -20,11 +21,8 @@ public interface FriendRepo extends JpaRepository<FriendLists, Long> {
     @Query(value = "select * from friend_lists where user_id = ?1", nativeQuery = true)
     List<FriendLists> getAllFriend(Long userId);
 
-    @Query(value = "select * from friend_lists where (name like %:keyword% or nick_name like %:keyword%) and user_id = :userid", nativeQuery = true)
+    @Query(value = "select * from friend_lists where (name like :keyword or nick_name like :keyword) and user_id = :userid", nativeQuery = true)
     List<FriendLists> findFriendByName(@Param("keyword") String keyword, @Param("userid") Long id);
-
-    @Query(value = "select * from users where name like %:name% and email not in (select email from friend_lists where user_id = :id)", nativeQuery = true)
-    Page<User> searchUserByName(@Param("name") String keyword, @Param("id") Long id, Pageable pageable);
 
     @Modifying
     @Query(value = "insert into friend_lists(address, email, name, nick_name, phone_number, user_id) VALUE (?1,?2,?3,?4,?5,?6)", nativeQuery = true)

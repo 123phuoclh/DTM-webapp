@@ -37,9 +37,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> searchName(String keyword, int pageNo) {
+    public Page<UserDTO> searchName(String keyword, Long userid, int pageNo) {
         Pageable pageable = PageRequest.of(pageNo, 5);
-        Page page = userRepository.searchUserByKeyword(keyword, pageable);
+        keyword = "%" + keyword +"%";
+        Page page = userRepository.searchUser(keyword, userid, pageable);
         return page;
     }
 

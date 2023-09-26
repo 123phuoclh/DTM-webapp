@@ -34,10 +34,9 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> searchUser(@RequestParam String keyword, int page) {
-        Page<User> result = userService.searchName(keyword, page);
-            return ResponseEntity.ok(result);
+    public ResponseEntity<?> searchFriend(@RequestParam String name, @RequestParam Long userID, int pageNo) {
+        Page<UserDTO> result = userService.searchName(name,userID, pageNo);
+            return new  ResponseEntity<>(result.get(), HttpStatus.OK);
         }
 
 

@@ -1,6 +1,7 @@
 package org.example.Backend.service.imp;
 
 import org.example.Backend.dto.FriendDTO;
+import org.example.Backend.dto.UserDTO;
 import org.example.Backend.model.FriendLists;
 import org.example.Backend.model.User;
 import org.example.Backend.repository.FriendRepo;
@@ -26,11 +27,12 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public Page<FriendLists> getAll(String name, Long userId, int page) {
         Pageable pageable = PageRequest.of(page, 5);
+        String name1 = '%' + name + '%';
         List<FriendLists> friendLists;
         if (name.equals("")) {
             friendLists = friendRepo.getAllFriend(userId);
         } else {
-            friendLists = friendRepo.findFriendByName(name, userId);
+            friendLists = friendRepo.findFriendByName(name1, userId);
         }
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), friendLists.size());
@@ -38,15 +40,10 @@ public class FriendServiceImpl implements FriendService {
         return new PageImpl<>(result, pageable, friendLists.size());
     }
 
-    @Override
-    public Page<User> searchToAddFriend(String name, Long id, int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        return friendRepo.searchUserByName(name, id, pageable);
-    }
 
     @Override
     public void addFriend(FriendDTO friendDTO) throws RuntimeException {
-        this.friendRepo.addFriend(friendDTO.getAddress(), friendDTO.getEmail(), friendDTO.getName(), friendDTO.getNick_name(), friendDTO.getPhoneNumber(), friendDTO.getUser_id());
+        this.friendRepo.addFriend(friendDTO.getAddress(), friendDTO.getEmail(), friendDTO.getName(), friendDTO.getNick_name(), friendDTO.getPhoneNumber(),friendDTO.getUser_id());
     }
     @Override
     public void deleteFriend(Long id) {
