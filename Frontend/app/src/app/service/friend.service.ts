@@ -3,7 +3,7 @@ import {HttpClient, HttpHandler, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {FriendModel} from "../model/friend.model";
 
-const BASE_URL = 'http://localhost:8080/'
+const BASE_URL = 'http://localhost:8080/friend'
 
 @Injectable({providedIn: 'root'})
 export class FriendService {
@@ -15,15 +15,15 @@ export class FriendService {
         param = param.append("name", name as string);
         param = param.append("userID", userID as number);
         param = param.append("pageNo", pageNo as number);
-        return this.http.get(BASE_URL + 'friend', {params: param})
+        return this.http.get(BASE_URL, {params: param})
     }
 
     addFriend(obj: FriendModel): Observable<any> {
-        return this.http.post(BASE_URL + 'add', {obj})
+        return this.http.put(BASE_URL + '/add', obj)
     }
 
     deleteFriend(id : number): Observable<any> {
-        return this.http.delete(BASE_URL + 'friend/delete/' + id)
+        return this.http.delete(BASE_URL + '/delete/' + id)
     }
 
     searchForFriend(name: string, userID: number, pageNo: number): Observable<any> {
@@ -31,6 +31,6 @@ export class FriendService {
       param = param.append("name", name as string);
       param = param.append("userID", userID as number);
       param = param.append("pageNo", pageNo as number);
-      return  this.http.get(BASE_URL + 'search/', {params: param})
+      return  this.http.get("http://localhost:8080/dashboard/user/search", {params: param})
     }
 }

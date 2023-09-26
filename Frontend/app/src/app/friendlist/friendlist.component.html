@@ -33,6 +33,9 @@
               <input [(ngModel)]="name" (ngModelChange)="getListFriend()" type="text" class="form-control"
                      placeholder="Search&hellip;">
             </div>
+            <div class="row d-flex justify-content-end">
+              <button class="btn btn-primary" title="Add Friend" (click)="openDiaLog()">Add Friend</button>
+            </div>
           </div>
         </div>
       </div>
@@ -59,8 +62,8 @@
           <td>
             <a href="#" class="view" title="View" data-toggle="tooltip"><i
               class="material-icons">&#xE417;</i></a>
-            <button class="delete" title="Delete" data-toggle="modal" data-target="#deleteModal"
-                    (click)="deleteFriend(element.id)"><i class="material-icons">&#xE872;</i>
+            <button class="delete" title="Delete" data-toggle="modal" data-target="#modal"
+                    (click)="deleteId = element.id; deleteName = element.name"><i class="material-icons">&#xE872;</i>
             </button>
           </td>
         </tr>
@@ -76,7 +79,7 @@
       </div>
     </div>
   </div>
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">

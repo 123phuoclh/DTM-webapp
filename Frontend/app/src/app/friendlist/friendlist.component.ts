@@ -6,6 +6,7 @@ import {AuthService} from "../service/auth.service";
 import {FriendModel} from "../model/friend.model";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {DeleteFriendComponent} from "./delete-friend/delete-friend.component";
+import {AddFriendComponent} from "./add-friend/add-friend.component";
 
 @Component({
   selector: 'app-friendlist',
@@ -56,16 +57,8 @@ export class FriendListComponent implements OnInit {
     )
   }
 
-  deleteFriend(id?: any) {
-    this.friend.deleteFriend(id).subscribe(data => {
-      document.getElementById('closeModal')?.click();
-      // this.event.emit(true);
-    });
-    this.toastr.success("Xóa thành công", "Thông báo")
-  }
-
   openDiaLog() {
-    this.dialog.open(DeleteFriendComponent, {data: this.listFriend[0].id})
+    this.dialog.open(AddFriendComponent)
   }
 
   delete() {

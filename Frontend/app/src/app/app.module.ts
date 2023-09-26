@@ -16,6 +16,7 @@ import {NgOptimizedImage} from "@angular/common";
 import {FriendListComponent} from "./friendlist/friendlist.component";
 import { DeleteFriendComponent } from './friendlist/delete-friend/delete-friend.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { AddFriendComponent } from './friendlist/add-friend/add-friend.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +24,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     RegisterComponent,
     DashboardComponent,
     FriendListComponent,
-    DeleteFriendComponent
+    DeleteFriendComponent,
+    AddFriendComponent
   ],
     imports: [
         BrowserModule,
