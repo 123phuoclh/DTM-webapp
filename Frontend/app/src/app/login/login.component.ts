@@ -13,7 +13,6 @@ import {TokenStorageService} from "../service/token-storage.service";
 
 export class LoginComponent implements OnInit {
   formGroup: FormGroup | any;
-  errorMessage = '';
   username = '';
 
   constructor(private formBuild: FormBuilder,
@@ -44,7 +43,6 @@ export class LoginComponent implements OnInit {
         this.formGroup.reset();
       },
       (err) => {
-        this.errorMessage = err.error.message;
         this.authService.isLoggedIn = false;
         this.toast.error("Sai tên đăng nhập hoặc mật khẩu hoặc tài khoản chưa được kích hoạt", "Đăng nhập thất bại: ", {
           timeOut: 3000,

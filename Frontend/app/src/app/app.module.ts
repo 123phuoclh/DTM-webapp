@@ -14,9 +14,9 @@ import {InterceptorProvider} from "./helper/Interceptor";
 import {HttpClientModule} from "@angular/common/http";
 import {NgOptimizedImage} from "@angular/common";
 import {FriendListComponent} from "./friendlist/friendlist.component";
-import { DeleteFriendComponent } from './friendlist/delete-friend/delete-friend.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { AddFriendComponent } from './friendlist/add-friend/add-friend.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +24,6 @@ import { AddFriendComponent } from './friendlist/add-friend/add-friend.component
     RegisterComponent,
     DashboardComponent,
     FriendListComponent,
-    DeleteFriendComponent,
     AddFriendComponent
   ],
     imports: [
@@ -37,7 +36,8 @@ import { AddFriendComponent } from './friendlist/add-friend/add-friend.component
         MatTabsModule,
         NgOptimizedImage,
         FormsModule,
-        MatDialogModule
+        MatDialogModule,
+        NgbModule
     ],
   providers: [InterceptorProvider],
   bootstrap: [AppComponent]
