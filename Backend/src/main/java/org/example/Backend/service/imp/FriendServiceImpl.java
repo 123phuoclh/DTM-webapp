@@ -1,9 +1,7 @@
 package org.example.Backend.service.imp;
 
 import org.example.Backend.dto.FriendDTO;
-import org.example.Backend.dto.UserDTO;
 import org.example.Backend.model.FriendLists;
-import org.example.Backend.model.User;
 import org.example.Backend.repository.FriendRepo;
 import org.example.Backend.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +46,10 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public void deleteFriend(Long id) {
         this.friendRepo.deleteById(id);
+    }
+
+    @Override
+    public void editFriend(FriendDTO friendDTO) {
+        this.friendRepo.editFriend(friendDTO.getNick_name(), friendDTO.getAddress(), friendDTO.getPhoneNumber(), friendDTO.getId());
     }
 }

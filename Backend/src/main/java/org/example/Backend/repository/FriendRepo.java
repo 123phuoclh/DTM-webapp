@@ -1,10 +1,6 @@
 package org.example.Backend.repository;
 
-import org.example.Backend.dto.UserDTO;
 import org.example.Backend.model.FriendLists;
-import org.example.Backend.model.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +23,8 @@ public interface FriendRepo extends JpaRepository<FriendLists, Long> {
     @Modifying
     @Query(value = "insert into friend_lists(address, email, name, nick_name, phone_number, user_id) VALUE (?1,?2,?3,?4,?5,?6)", nativeQuery = true)
     void addFriend(String address, String email, String name, String nick_name, String phone_number, Long user_id);
+
+    @Modifying
+    @Query(value = "update friend_lists as f set f.nick_name = ?1, f.address =?2, f.phone_number = ?3 where f.id = ?4", nativeQuery = true)
+    void editFriend(String nickName, String address, String phoneNumber, Long id);
 }

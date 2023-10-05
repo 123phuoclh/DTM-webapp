@@ -22,10 +22,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public double getTotalPage() {
-        return userRepository.findAll().size();
-    }
-
     @Override
     public UserDTO getUserByID(Long id) throws ResourceNotFoundException {
         Optional<User> user = userRepository.findById(id);
@@ -38,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDTO> searchName(String keyword, Long userid, int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
+        Pageable pageable = PageRequest.of(pageNo, 15);
         keyword = "%" + keyword +"%";
         Page page = userRepository.searchUser(keyword, userid, pageable);
         return page;

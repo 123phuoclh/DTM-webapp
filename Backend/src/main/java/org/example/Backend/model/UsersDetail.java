@@ -1,11 +1,13 @@
 package org.example.Backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -28,6 +30,10 @@ public class UsersDetail {
     private String username;
 
     private String hashed_password;
+
+    @OneToMany(mappedBy = "usersDetail" )
+    @JsonBackReference
+    private Set<AccountRole> accountRoleList;
 
     public UsersDetail(String name, String email, String username, String hashedPassword) {
         this.name = name;

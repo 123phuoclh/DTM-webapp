@@ -1,12 +1,10 @@
 package org.example.Backend.controller;
 
 import org.example.Backend.dto.UserDTO;
-import org.example.Backend.model.User;
 import org.example.Backend.service.UserService;
 import org.example.Backend.service.UsersDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("dashboard/user")
@@ -54,11 +51,13 @@ public class UserController {
             } else {
 
                 userService.updateUserByID(userDTO);
-                return new ResponseEntity<>(HttpStatus.OK);
+                response.put("message","Cập nhật thành công");
+                return new ResponseEntity<>(response,HttpStatus.OK);
             }
         } else {
             userService.updateUserByID(userDTO);
-            return new ResponseEntity<>(HttpStatus.OK);
+            response.put("message","Cập nhật thành công");
+            return new ResponseEntity<>(response,HttpStatus.OK);
         }
     }
 }

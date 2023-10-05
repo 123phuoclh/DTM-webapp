@@ -5,9 +5,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UsersDetailCustom implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -16,18 +16,17 @@ public class UsersDetailCustom implements UserDetails {
     @JsonIgnore
     private String password;
     List<GrantedAuthority> authorities = null;
-    private User user;
+    private UsersDetail usersDetail;
 
-    public User getUser() {
-        return user;
+    public UsersDetail getUser() {
+        return usersDetail;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UsersDetail user) {
+        this.usersDetail = user;
     }
 
-    public UsersDetailCustom(Long id, String username, String password,
-                             List<GrantedAuthority> authorities) {
+    public UsersDetailCustom(Long id, String username, String password, List<GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -35,13 +34,8 @@ public class UsersDetailCustom implements UserDetails {
     }
 
     public static UsersDetailCustom build(UsersDetail usersDetail) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("admin"));
-        return new UsersDetailCustom(
-                usersDetail.getId(),
-                usersDetail.getUsername(),
-                usersDetail.getHashed_password(),
-                authorities);
+        List<GrantedAuthority> authorities = usersDetail.getAccountRoleList().stream().map(role -> new SimpleGrantedAuthority(role.getRole().getName())).collect(Collectors.toList());
+        return new UsersDetailCustom(usersDetail.getId(), usersDetail.getUsername(), usersDetail.getHashed_password(), authorities);
     }
 
     @Override
