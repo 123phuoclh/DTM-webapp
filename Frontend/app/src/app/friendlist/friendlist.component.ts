@@ -7,76 +7,121 @@ import {FriendModel} from "../model/friend.model";
 import {MatDialog} from "@angular/material/dialog";
 import {AddFriendComponent} from "./add-friend/add-friend.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Router} from "@angular/router";
 
 @Component({
-    selector: 'app-friendlist',
-    templateUrl: './friendlist.component.html',
-    styleUrls: ['./friendlist.component.scss']
+  selector: 'app-friendlist',
+  templateUrl: './friendlist.component.html',
+  styleUrls: ['./friendlist.component.scss']
 })
 export class FriendListComponent implements OnInit {
 
-    deleteId!: number;
-    deleteName!: string;
-    listFriend: FriendModel[] = [];
-    name = '';
-    userID: any;
-    pageNo = 0;
-    totalPage!: number
+  deleteId!: number;
+  deleteName!: string;
+  listFriend: FriendModel[] = [];
+  name = '';
+  userID: any;
+  pageNo = 0;
+  totalPage!: number;
+  selectedFriend!: FriendModel | any;
+  role = ''
 
-    constructor(private friend: FriendService,
-                private token: TokenStorageService,
-                private toastr: ToastrService,
-                private auth: AuthService,
-                private dialog: MatDialog,
-                private modalService: NgbModal) {
-        if (token) {
-            this.userID = token.getUser().id
-        }
+  constructor(private friend: FriendService,
+              private token: TokenStorageService,
+              private route: Router,
+              private toastr: ToastrService,
+              private auth: AuthService,
+              private dialog: MatDialog,
+              private modalService: NgbModal) {
+    if (this.token.getUser()) {
+      this.userID = this.token.getUser().id;
+      this.role = this.token.getUser().role[0]
+      if (this.role !== 'ADMIN') {
+        this.route.navigate(['/dashboard/user'])
+      }
+    } else {
+      this.route.navigate(['/login'])
     }
 
-    ngOnInit(): void {
-        this.getListFriend(0)
-    }
+  }
 
-    openDeleteModal(id: number, content: any) {
-        this.deleteId = id;
-        this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(
-            (result) => {
-                if (result === 'delete') {
-                    this.friend.deleteFriend(this.deleteId).subscribe(data => {
-                            this.toastr.success("Xóa thành công", "Thông báo"), {
-                                timeOut: 3000,
-                                extendedTimeOut: 1500
-                            }
-                            this.ngOnInit()
-                        }
-                    )
-                }
-            },
-        );
+  ngOnInit(): void {
+    if (this.pageNo + 1 === this.totalPage && this.pageNo !== 0) {
+      this.pageNo -= 1;
+      this.getListFriend(this.pageNo);
+    } else {
+      this.getListFriend(this.pageNo)
     }
+    this.selectedFriend = {};
+  }
 
-    getListFriend(pageNo: number) {
-        let trim = this.name.trim()
-        this.friend.getFriend(trim, this.userID, pageNo).subscribe(data => {
-                if (data !== null) {
-                    this.listFriend = data.content;
-                    this.totalPage = data.totalPages;
-                } else {
-                    this.toastr.warning("Bạn chưa có bạn bè", "Thông báo"), {
-                        timeOut: 3000,
-                        extendedTimeOut: 1500
-                    }
-                }
+  openDeleteModal(id: number, content: any) {
+    this.deleteId = id;
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(
+      (result) => {
+        if (result === 'delete') {
+          this.friend.deleteFriend(this.deleteId).subscribe(data => {
+              this.toastr.success("Xóa thành công", "Thông báo", {
+                timeOut: 3000,
+                extendedTimeOut: 1500
+              })
+              this.ngOnInit()
+            }, error => {
+              this.toastr.error("Xóa thất bại", "Thông báo")
             }
-        )
-    }
+          )
+        }
+      },
+    );
+  }
 
-    openDiaLog() {
-        this.dialog.open(AddFriendComponent)
+  openEditModal(id: number, content: any) {
+    const value = this.listFriend.find(value => value.id === id);
+    if (value) {
+      this.selectedFriend = value;
     }
+    this.modalService.open(content, {windowClass: 'width-80'}).result.then((result) => {
+      if (result === 'edit') {
+        this.friend.editFriend(this.selectedFriend).subscribe(res => {
+          this.toastr.success("Sửa thành công", "Thông báo", {
+            timeOut: 3000,
+            extendedTimeOut: 1500
+          })
+          this.ngOnInit()
+        }, error => {
+          this.toastr.error("Lỗi hệ thống vui lòng thử lại", " Thông báo")
+        })
+      } else {
+        this.ngOnInit();
+      }
+    })
+  }
 
-    logout() {
-        this.auth.logout()
-    }
+  getListFriend(pageNo: number) {
+    let trim = this.name.trim()
+    this.friend.getFriend(trim, this.userID, pageNo).subscribe(data => {
+        if (data !== null) {
+          this.listFriend = data.content;
+          this.totalPage = data.totalPages;
+        } else {
+          this.toastr.warning("Bạn chưa có bạn bè", "Thông báo"), {
+            timeOut: 3000,
+            extendedTimeOut: 1500
+          }
+        }
+      }
+    )
+  }
+
+  openDiaLog() {
+    this.dialog.open(AddFriendComponent);
+    this.dialog.afterAllClosed.subscribe(next => {
+        this.ngOnInit()
+      }
+    )
+  }
+
+  logout() {
+    this.auth.logout()
+  }
 }

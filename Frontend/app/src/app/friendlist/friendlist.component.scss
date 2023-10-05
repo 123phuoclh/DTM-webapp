@@ -116,3 +116,11 @@ table.table td i {
 .text-center {
   text-align:center
 }
+.edit {
+  color: coral;
+  border: none;
+}
+.width-80 .modal-dialog {
+  width: 80%;
+  min-width: 80%;
+}

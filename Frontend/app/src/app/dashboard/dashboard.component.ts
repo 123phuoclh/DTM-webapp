@@ -1,99 +1,92 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {TokenStorageService} from "../service/token-storage.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {UserService} from "../service/user.service";
 import {AuthService} from "../service/auth.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {UserModel} from "../model/user.model";
 
 @Component({
-    selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  public proFile: UserModel
+  data : any;
+  role = '';
 
-    public name = '';
-    public address = '';
-    public nickName = '';
-    public email = '';
-    public phoneNumber = '';
-    private id: undefined;
-    private username = '';
-    public formGroup: FormGroup | any
-    public isSubmitted = false;
-    data = this.tokenStorage.getUser()
-
-    constructor(private tokenStorage: TokenStorageService,
-                private router: Router,
-                private toastr: ToastrService,
-                private user: UserService,
-                private formBuild: FormBuilder,
-                private auth: AuthService) {
-        if (this.data) {
-            this.name = this.data.name
-            this.address = this.data.address
-            this.nickName = this.data.nickName
-            this.email = this.data.email
-            this.phoneNumber = this.data.phoneNumber
-            this.id = this.data.id
-            this.username = this.data.username
-        } else {
-            this.router.navigateByUrl('/login')
-        }
+  constructor(private tokenStorage: TokenStorageService,
+              private router: Router,
+              private toastr: ToastrService,
+              private user: UserService,
+              private auth: AuthService,
+              private modalService: NgbModal) {
+    this.proFile = new UserModel()
+    if (this.tokenStorage.getUser()) {
+      this.data = this.tokenStorage.getUser().user
+      this.proFile.name = this.data.name
+      this.proFile.address = this.data.address
+      this.proFile.nickName = this.data.nickName
+      this.proFile.email = this.data.email
+      this.proFile.phoneNumber = this.data.phoneNumber
+      this.proFile.id = this.data.id
+      this.proFile.username = this.data.username
+    } else {
+      this.router.navigate(['/login'])
     }
+  }
 
-    validation_messages = {
-        'nickName': [
-            {type: 'required', message: 'Trường này không được để trống!'},
-        ],
-        'name': [
-            {type: 'required', message: 'Trường này không được để trống!'},
-        ],
-        'email': [
-            {type: 'required', message: 'Trường này không được để trống!'},
-            {type: 'pattern', message: 'Email sai định dạng'}
-        ]
-    }
+  ngOnInit(): void {
+    this.data = this.tokenStorage.getUser().user;
+    this.role = this.tokenStorage.getUser().role[0];
+  }
 
-    ngOnInit(): void {
-        this.formGroup = this.formBuild.group({
-            email: ['', [Validators.required, Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]],
-            name: ['', Validators.required],
-            nickName: ['', Validators.required],
-            address: '',
-            phoneNumber: '',
-            avatar: '',
-            id: this.id,
-            username: this.username
+  onSubmit() {
+    if (this.proFile.email.trim() === '') {
+      this.toastr.warning("Email không đúng định dạng hoặc để trống", "Warning:", {
+        positionClass: 'toast-bottom-right',
+        timeOut: 1500,
+        extendedTimeOut: 1500
+      })
+    } else if (this.proFile.name.trim() === '') {
+      this.toastr.warning("Tên không được để trống", "Warning:", {
+        positionClass: 'toast-bottom-right',
+        timeOut: 1500,
+        extendedTimeOut: 1500
+      })
+    } else {
+      this.user.edit(this.proFile).subscribe(res => {
+          if (res.message !== "Email đã tồn tại") {
+            this.tokenStorage.saveUserLocal(this.proFile)
+            this.toastr.success("Thay đổi thành công", "Thông báo")
+            this.ngOnInit()
+          } else {
+            this.toastr.warning(res.message, "Thông báo")
+          }
+        },
+        err => {
+          this.toastr.error(err.error.message, 'Lỗi: ', {
+            positionClass: 'toast-bottom-right',
+            timeOut: 1500,
+            extendedTimeOut: 1500
+          });
         })
     }
+  }
 
-    onSubmit() {
-        if (this.formGroup.invalid) {
-            this.toastr.warning("Form phải được điền đúng định dạng", "Warning:", {
-                positionClass: 'toast-bottom-right',
-                timeOut: 1500,
-                extendedTimeOut: 1500
-            })
-        } else {
-            this.user.edit(this.formGroup.value).subscribe(data => {
-                    this.isSubmitted = true;
-                    this.tokenStorage.signOut();
-                    window.location.reload()
-                },
-                err => {
-                    this.toastr.error(err.error.message, 'Lỗi: ', {
-                        positionClass: 'toast-bottom-right',
-                        timeOut: 1500,
-                        extendedTimeOut: 1500
-                    });
-                    this.isSubmitted = false;
-                })
+  openModalEdit(content: any) {
+    this.modalService.open(content, {backdrop: 'static', ariaLabelledBy: 'modal-basic-title'}).result.then(
+      (result) => {
+        if (result === 'cancel') {
+          this.proFile = this.data
+          this.ngOnInit()
         }
-    }
+      })
+  }
 
-    logout() {
-        this.auth.logout()
-    }
+  logout() {
+    this.auth.logout()
+  }
 }

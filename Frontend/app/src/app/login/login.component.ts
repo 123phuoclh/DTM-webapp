@@ -14,6 +14,7 @@ import {TokenStorageService} from "../service/token-storage.service";
 export class LoginComponent implements OnInit {
   formGroup: FormGroup | any;
   username = '';
+  role : string[] =[];
 
   constructor(private formBuild: FormBuilder,
               private toast: ToastrService,
@@ -28,18 +29,19 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
     if(this.tokenStorage.getToken()){
-      const user = this.tokenStorage.getUser();
       this.authService.isLoggedIn = true;
-      this.username = this.tokenStorage.getUser().username
+      this.username = this.tokenStorage.getUser().username;
+      this.role = this.tokenStorage.getUser().role;
+      this.router.navigate(['/dashboard/user']);
     }
   }
 
   onSubmit() {
     this.authService.login(this.formGroup.value).subscribe(data => {
-        this.tokenStorage.saveTokenLocal(data.token)
-        this.tokenStorage.saveUserLocal(data.user)
-        this.authService.isLoggedIn = true
-        this.router.navigate(['/dashboard/user'])
+        this.tokenStorage.saveTokenLocal(data.token);
+        this.tokenStorage.saveUserLocal(data);
+        this.authService.isLoggedIn = true;
+        this.router.navigate(['/dashboard/user']);
         this.formGroup.reset();
       },
       (err) => {

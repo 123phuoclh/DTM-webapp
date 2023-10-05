@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHandler, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {FriendModel} from "../model/friend.model";
 
@@ -32,5 +32,9 @@ export class FriendService {
       param = param.append("userID", userID as number);
       param = param.append("pageNo", pageNo as number);
       return  this.http.get("http://localhost:8080/dashboard/user/search", {params: param})
+    }
+
+    editFriend(obj: FriendModel) : Observable<any> {
+      return this.http.post(BASE_URL + '/edit', obj)
     }
 }

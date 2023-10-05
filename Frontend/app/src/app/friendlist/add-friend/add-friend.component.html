@@ -1,9 +1,9 @@
 <div class="card-body p-2">
   <div class="modal-body">
     <div class="container">
-      <div class="card mb-2">
-        <div class="input-group input-group-lg">
-          <input [(ngModel)]="name" (ngModelChange)="searchForFriend()" type="text"
+      <div class="card mb-2" style="max-height: 400px">
+        <div class="input-group input-group-lg" style="position: sticky; top: 0">
+          <input [(ngModel)]="name" (keydown.enter)="searchForFriend()" type="text"
                  class="form-control form-control-lg rounded" placeholder="Type Keywords"
                  aria-label="Type Keywords" aria-describedby="basic-addon2"/>
         </div>
@@ -24,9 +24,7 @@
             <td>{{element.nick_name}}</td>
             <td>{{element.email}}</td>
             <td>
-              <a href="#" class="view" title="View" data-toggle="tooltip"><i
-                class="material-icons">&#xE417;</i></a>
-              <button class="delete" title="Add" data-toggle="modal" data-target="#modal"
+              <button class="delete" title="Add" data-toggle="modal" data-target="#modal" style="border: none;color: #76bd75;background-color: transparent"
                       (click)="addFriend(element)"><i class="material-icons">&#xe1d3;</i>
               </button>
             </td>
