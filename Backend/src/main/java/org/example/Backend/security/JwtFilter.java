@@ -2,10 +2,9 @@ package org.example.Backend.security;
 
 import org.example.Backend.service.UsersDetailService;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -34,14 +33,11 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtility.validateJwtToken(jwt)) {
-                String username = jwtUtility.getUserNameFromJWToken(jwt);
-
-                UserDetails usersDetail = usersDetailService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        usersDetail, null, usersDetail.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                Authentication authentication = jwtUtility.getUserNameFromJWToken(jwt);
+                UserDetails usersDetail = usersDetailService.loadUserByUsername(authentication.getName());
+                if (usersDetail.getAuthorities().toString().equals(authentication.getAuthorities().toString())) {
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);

@@ -25,12 +25,12 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public Page<FriendLists> getAll(String name, Long userId, int page) {
         Pageable pageable = PageRequest.of(page, 5);
-        String name1 = '%' + name + '%';
+        name = '%' + name + '%';
         List<FriendLists> friendLists;
         if (name.equals("")) {
             friendLists = friendRepo.getAllFriend(userId);
         } else {
-            friendLists = friendRepo.findFriendByName(name1, userId);
+            friendLists = friendRepo.findFriendByName(name, userId);
         }
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), friendLists.size());

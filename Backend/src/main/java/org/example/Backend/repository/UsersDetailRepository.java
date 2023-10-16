@@ -6,10 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional
 public interface UsersDetailRepository extends JpaRepository<UsersDetail, String> {
     UsersDetail findUsersDetailByUsername(String username);
 
@@ -17,8 +15,8 @@ public interface UsersDetailRepository extends JpaRepository<UsersDetail, String
     String existUserEmail(String email);
 
     @Modifying
-    @Query(value = "insert into users_detail(name, email, username, hashed_password) values (?1,?2,?3,?4)",nativeQuery = true)
-    void addNew(String name, String email, String username, String hashed_password);
+    @Query(value = "insert into users_detail(name, email, username, hashed_password, role_id) values (?1,?2,?3,?4,?5)",nativeQuery = true)
+    void addNew(String name, String email, String username, String hashed_password, int role_id);
 
     @Modifying
     @Query(value = "insert into users(avatar,email,username, name, nick_name, address, phone_number) values ('',?1,?2,?3,'','','')", nativeQuery = true)

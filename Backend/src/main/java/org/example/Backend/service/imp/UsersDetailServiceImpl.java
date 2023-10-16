@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class UsersDetailServiceImpl implements UsersDetailService {
     @Autowired
     private UsersDetailRepository usersDetailRepository;
@@ -19,7 +17,7 @@ public class UsersDetailServiceImpl implements UsersDetailService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         UsersDetail usersDetail = usersDetailRepository.findUsersDetailByUsername(username);
-        if (usersDetail.getUsername() == null) {
+        if (usersDetail == null) {
             throw new UsernameNotFoundException("User not found with the username of: " + username);
         }
 
@@ -32,8 +30,8 @@ public class UsersDetailServiceImpl implements UsersDetailService {
     }
 
     @Override
-    public void addNew(String name, String email, String username, String hashed_password) {
-        usersDetailRepository.addNew(name, email, username, hashed_password);
+    public void addNew(String name, String email, String username, String hashed_password, int role_id) {
+        usersDetailRepository.addNew(name, email, username, hashed_password, role_id);
     }
 
     @Override

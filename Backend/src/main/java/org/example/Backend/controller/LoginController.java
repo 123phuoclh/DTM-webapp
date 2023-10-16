@@ -49,8 +49,8 @@ public class LoginController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(usersDetailDTO.getUsername(), usersDetailDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtility.generateJwtToken(usersDetailDTO);
         UsersDetailCustom userDetail = (UsersDetailCustom) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String jwt = jwtUtility.generateJwtToken(userDetail);
         List<String> role = userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         UsersDetail usersDetail = usersDetailService.getUserDetailByUserName(usersDetailDTO.getUsername());
         User user = userService.getUserByEmail(usersDetail.getEmail());
@@ -71,10 +71,8 @@ public class LoginController {
             return ResponseEntity.ok().body(response);
         } else {
             UsersDetail usersDetail = new UsersDetail(usersDetailDTO.getName(), usersDetailDTO.getEmail(), usersDetailDTO.getUsername(), passwordEncoder.encode(usersDetailDTO.getPassword()));
-            usersDetailService.addNew(usersDetail.getName(), usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getHashed_password());
+            usersDetailService.addNew(usersDetail.getName(), usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getHashed_password(), 2);
             usersDetailService.addNewUser(usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getName());
-            Long newId = usersDetailService.getUserDetailByUserName(usersDetail.getUsername()).getId();
-            roleService.setRole(newId, 2);
             Map<String, String> response = new HashMap<>();
             response.put("message", "Đăng ký tài khoản thành công");
             return ResponseEntity.ok(response);
