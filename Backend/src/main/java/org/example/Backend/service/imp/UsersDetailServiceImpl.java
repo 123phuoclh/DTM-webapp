@@ -30,8 +30,8 @@ public class UsersDetailServiceImpl implements UsersDetailService {
     }
 
     @Override
-    public void addNew(String name, String email, String username, String hashed_password, int role_id) {
-        usersDetailRepository.addNew(name, email, username, hashed_password, role_id);
+    public void addNew(String name, String email, String username, String hashed_password) {
+        usersDetailRepository.addNew(name, email, username, hashed_password);
     }
 
     @Override
@@ -42,6 +42,11 @@ public class UsersDetailServiceImpl implements UsersDetailService {
     @Override
     public UsersDetail getUserDetailByUserName(String username) {
         return usersDetailRepository.findUsersDetailByUsername(username);
+    }
+
+    @Override
+    public void setRole(Long user_id, int role_id) {
+        this.usersDetailRepository.setRole(user_id,role_id);
     }
 }
 

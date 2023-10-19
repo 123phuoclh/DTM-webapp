@@ -15,10 +15,14 @@ public interface UsersDetailRepository extends JpaRepository<UsersDetail, String
     String existUserEmail(String email);
 
     @Modifying
-    @Query(value = "insert into users_detail(name, email, username, hashed_password, role_id) values (?1,?2,?3,?4,?5)",nativeQuery = true)
-    void addNew(String name, String email, String username, String hashed_password, int role_id);
+    @Query(value = "insert into users_detail(name, email, username, hashed_password) values (?1,?2,?3,?4)",nativeQuery = true)
+    void addNew(String name, String email, String username, String hashed_password);
 
     @Modifying
     @Query(value = "insert into users(avatar,email,username, name, nick_name, address, phone_number) values ('',?1,?2,?3,'','','')", nativeQuery = true)
     void addNewUser(String email,String username, String name);
+
+    @Modifying
+    @Query(value = "insert into user_role(user_id,role_id) value (?1,?2)", nativeQuery = true)
+    void setRole(Long user_id, int role_id);
 }

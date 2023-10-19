@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class UsersDetailCustom implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -35,7 +34,7 @@ public class UsersDetailCustom implements UserDetails {
     }
 
     public static UsersDetailCustom build(UsersDetail usersDetail) {
-        List<GrantedAuthority> authorities = Stream.of(usersDetail.getRole()).map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        List<GrantedAuthority> authorities = usersDetail.getRoleList().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
         return new UsersDetailCustom(usersDetail.getId(), usersDetail.getUsername(), usersDetail.getHashed_password(), authorities);
     }
 

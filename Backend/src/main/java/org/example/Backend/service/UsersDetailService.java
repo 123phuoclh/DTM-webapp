@@ -9,8 +9,10 @@ public interface UsersDetailService extends UserDetailsService {
 
     String existUserEmail(String email);
 
-    void addNew(String name, String email, String username, String hashed_password, int role_id);
+    void addNew(String name, String email, String username, String hashed_password);
     void addNewUser(String email,String username, String name);
 
     UsersDetail getUserDetailByUserName(String username);
+
+    void setRole(Long user_id, int role_id);
 }

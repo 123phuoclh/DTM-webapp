@@ -6,7 +6,6 @@ import org.example.Backend.model.UsersDetail;
 import org.example.Backend.model.UsersDetailCustom;
 import org.example.Backend.payload.JwtResponse;
 import org.example.Backend.security.JwtUtility;
-import org.example.Backend.service.RoleService;
 import org.example.Backend.service.UserService;
 import org.example.Backend.service.UsersDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +39,6 @@ public class LoginController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     UserService userService;
-    @Autowired
-    RoleService roleService;
 
     @PostMapping("/login")
     @Transactional
@@ -71,8 +68,10 @@ public class LoginController {
             return ResponseEntity.ok().body(response);
         } else {
             UsersDetail usersDetail = new UsersDetail(usersDetailDTO.getName(), usersDetailDTO.getEmail(), usersDetailDTO.getUsername(), passwordEncoder.encode(usersDetailDTO.getPassword()));
-            usersDetailService.addNew(usersDetail.getName(), usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getHashed_password(), 2);
+            usersDetailService.addNew(usersDetail.getName(), usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getHashed_password());
             usersDetailService.addNewUser(usersDetail.getEmail(), usersDetail.getUsername(), usersDetail.getName());
+            UsersDetail getID = usersDetailService.getUserDetailByUserName(usersDetailDTO.getUsername());
+            usersDetailService.setRole(getID.getId(),2);
             Map<String, String> response = new HashMap<>();
             response.put("message", "Đăng ký tài khoản thành công");
             return ResponseEntity.ok(response);
