@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {TokenStorageService} from "../service/token-storage.service";
 import {ToastrService} from "ngx-toastr";
@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   public proFile: UserModel
   data : any;
   role = '';
+  hasRight= true;
 
   constructor(private tokenStorage: TokenStorageService,
               private router: Router,
@@ -84,6 +85,17 @@ export class DashboardComponent implements OnInit {
           this.ngOnInit()
         }
       })
+  }
+  openFriend() {
+    if (this.hasRight) {
+      this.router.navigate(['/friend'])
+    } else {
+      this.toastr.error("Máy chủ lỗi, vui lòng đăng nhập lại", "Lỗi");
+    }
+  }
+
+  hasNoRight(event : boolean){
+    this.hasRight = event;
   }
 
   logout() {

@@ -60,7 +60,8 @@
           <td>{{element.address}}</td>
           <td>{{element.phoneNumber}}</td>
           <td>
-            <button class="edit" title="Edit" (click)="openEditModal(element.id, editModal)"><i class="material-icons">&#xe254;</i></button>
+            <button class="edit" title="Edit" (click)="openEditModal(element.id, editModal)"><i class="material-icons">&#xe254;</i>
+            </button>
             <button class="delete" title="Delete" style="border: none;color: red;"
                     (click)="deleteName= element.name; openDeleteModal(element.id,deleteModal)"><i
               class="material-icons">&#xE872;</i>
@@ -78,22 +79,24 @@
       <h3 class="mat-typography h3 fw-bold"> Total {{totalPage}} result page</h3>
     </div>
     <div class="col-md-3">
-      <ul class="pagination d-flex justify-content-md-end justify-content-center" style="width: 100%">
+      <ul class="pagination d-flex justify-content-md-end justify-content-center" style="width: 100%;margin-top: 5px;margin-bottom: 20px;">
         <li class="page-item">
-          <button class="page-link" [hidden]="pageNo === 0" (click)="pageNo = 0;getListFriend(0)"><i
+          <button class="page-link" style="border: none;padding: inherit;margin-right: 10px;" [hidden]="pageNo === 0"
+                  (click)="pageNo = 0;getListFriend(0)"><i
             class="fa fa-angle-double-left"></i></button>
         </li>
         <li class="page-item">
-          <button class="page-link" [hidden]="pageNo === 0"
+          <button class="page-link" style="border: none;padding: inherit;margin-right: 10px;" [hidden]="pageNo === 0"
                   (click)="pageNo = pageNo -1; getListFriend(pageNo)"><i class="fa fa-angle-left"></i>
           </button>
         </li>
         <li class="page-item">
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1" style="padding-bottom: 4px;"
+              <span class="input-group-text" id="basic-addon1" style="padding: inherit;border: none"
                     (keyup.enter)="pageNo = ok.valueAsNumber - 1; getListFriend(pageNo)">
-                <input #ok style="padding: 0!important;" class="text-center" type="number" min="1" [max]="totalPage"
+                <input #ok style="padding: 0!important;width: 32px;border: none;" class="text-end" type="number" min="1"
+                       [max]="totalPage"
                        [valueAsNumber]="pageNo + 1">/ {{totalPage}}
               </span>
             </div>
@@ -101,12 +104,13 @@
         </li>
 
         <li class="page-item">
-          <button class="page-link" [hidden]="pageNo >=  totalPage - 1"
+          <button class="page-link" style="border: none;padding: inherit;margin-left: 10px;"
+                  [hidden]="pageNo >=  totalPage - 1"
                   (click)="pageNo = pageNo + 1; getListFriend(pageNo)"><i class="fa fa-angle-right"></i>
           </button>
         </li>
         <li class="page-item">
-          <button class="page-link"
+          <button class="page-link" style="border: none;padding: inherit;margin-left: 10px;"
                   [hidden]="pageNo >=  totalPage - 1 && pageNo < totalPage"
                   (click)="pageNo = totalPage - 1; getListFriend(totalPage -1)"><i class="fa fa-angle-double-right"></i>
           </button>
@@ -124,56 +128,56 @@
     Bạn có chắc muốn xóa {{deleteName}} không?
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('cancel')">Hủy</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.close('cancel')">Hủy</button>
     <button type="button" class="btn btn-danger" (click)="modal.close('delete')">Xóa</button>
   </div>
 </ng-template>
 <ng-template #editModal let-modal style="position: fixed!important;">
   <div class="modal-header">
-    <h6 class="modal-title"><b>Edit Profile</b></h6>
+    <h6 class="modal-title" style="margin-bottom: 0;font-size: inherit;"><b>Edit Profile</b></h6>
   </div>
   <div class="modal-body">
     <div class="row">
-    <form class="form-horizontal padding-10">
-      <div class="form-group">
-        <label class="col-md-3 control-label" for="profileName">Name</label>
-        <div class="col-md-8">
-          <input type="text" class="form-control" id="profileName" name="profileName"
-                 [(ngModel)]="selectedFriend.name" [readonly]="selectedFriend.name !== undefined">
+      <form class="form-horizontal padding-10">
+        <div class="form-group">
+          <label class="col-md-3 control-label" for="profileName">Name</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" id="profileName" name="profileName"
+                   [(ngModel)]="selectedFriend.name" [readonly]="selectedFriend.name !== undefined">
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-md-3 control-label" for="profileNickName">Nick Name</label>
-        <div class="col-md-8">
-          <input type="text" class="form-control" id="profileNickName"
-                 name="profileNickName"
-                 [(ngModel)]="selectedFriend.nick_name">
+        <div class="form-group">
+          <label class="col-md-3 control-label" for="profileNickName">Nick Name</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" id="profileNickName"
+                   name="profileNickName"
+                   [(ngModel)]="selectedFriend.nick_name">
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-md-3 control-label" for="profileEmail">Email</label>
-        <div class="col-md-8">
-          <input type="text" class="form-control" id="profileEmail" name="profileEmail"
-                 [(ngModel)]="selectedFriend.email" [readonly]="selectedFriend.email !== undefined">
+        <div class="form-group">
+          <label class="col-md-3 control-label" for="profileEmail">Email</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" id="profileEmail" name="profileEmail"
+                   [(ngModel)]="selectedFriend.email" [readonly]="selectedFriend.email !== undefined">
           </div>
 
         </div>
-      <div class="form-group">
-        <label class="col-md-3 control-label" for="profileAddress">Address</label>
-        <div class="col-md-8">
-          <input type="text" class="form-control" id="profileAddress"
-                 name="profileAddress"
-                 [(ngModel)]="selectedFriend.address">
+        <div class="form-group">
+          <label class="col-md-3 control-label" for="profileAddress">Address</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" id="profileAddress"
+                   name="profileAddress"
+                   [(ngModel)]="selectedFriend.address">
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-md-3 control-label" for="profilePhone">Phone Number</label>
-        <div class="col-md-8">
-          <input type="text" class="form-control" id="profilePhone" name="profilePhone"
-                 [(ngModel)]="selectedFriend.phoneNumber">
+        <div class="form-group">
+          <label class="col-md-3 control-label" for="profilePhone">Phone Number</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" id="profilePhone" name="profilePhone"
+                   [(ngModel)]="selectedFriend.phoneNumber">
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
     </div>
   </div>
   <div class="modal-footer">

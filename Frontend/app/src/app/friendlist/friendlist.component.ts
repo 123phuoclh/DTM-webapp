@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FriendService} from "../service/friend.service";
 import {TokenStorageService} from "../service/token-storage.service";
 import {ToastrService} from "ngx-toastr";
@@ -15,6 +15,8 @@ import {Router} from "@angular/router";
   styleUrls: ['./friendlist.component.scss']
 })
 export class FriendListComponent implements OnInit {
+  @Output()
+  isPermitted = new EventEmitter<boolean>;
 
   deleteId!: number;
   deleteName!: string;
@@ -71,6 +73,9 @@ export class FriendListComponent implements OnInit {
             }
           )
         }
+        if (result === 'cancel') {
+          this.modalService.dismissAll()
+        }
       },
     );
   }
@@ -109,6 +114,9 @@ export class FriendListComponent implements OnInit {
             extendedTimeOut: 1500
           }
         }
+      }, error => {
+      this.isPermitted.emit(false);
+      this.route.navigate(['/dashboard/user'])
       }
     )
   }
